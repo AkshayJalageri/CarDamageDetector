@@ -25,7 +25,7 @@ An AI-powered system for detecting and marking car dents or damages from both im
 
 ✅ Prerequisites
 
-* Python ≥ 3.6
+* Python >= 3.6 <= 3.11
 * Install dependencies using pip:
 
 ```bash
@@ -38,7 +38,61 @@ Or manually install:
 pip install gitpython matplotlib numpy opencv-python pillow psutil PyYAML requests scipy thop torch torchvision tqdm ultralytics pandas seaborn setuptools filterpy scikit-image lap
 ```
 
+🏋️‍♂️ How to Train the YOLOv8 Model (Generate `best.pt`)
+
+The `best.pt` model file is **not included** in this repository due to its large size.
+
+To train the model yourself and generate `best.pt`, follow these steps:
+
+1. 🔗 Download the Dataset
+
+Get the custom car damage dataset from [Roboflow](https://roboflow.com/) or your own labeled dataset in YOLO format.
+
+2. 📁 Upload to Google Drive
+
+Upload your dataset folder (e.g., `CarDent`) to your Google Drive, typically under:
+
+```
+/MyDrive/Datasets/CarDent/
+```
+
+3. 📓 Open Google Colab
+
+Create a new [Google Colab](https://colab.research.google.com/) notebook, and use the following code:
+
+```python
+!pip install ultralytics
+from ultralytics import YOLO
+
+# Train the YOLOv8 model
+model = YOLO('yolov8l.pt')  # or yolov8n.pt for a lighter model
+model.train(data='/content/drive/MyDrive/Datasets/CarDent/data.yaml', epochs=50, imgsz=640)
+```
+
+Make sure to:
+
+* Mount your Google Drive (`from google.colab import drive; drive.mount('/content/drive')`)
+* Adjust paths as needed
+
+4. ✅ Get the Trained Model
+
+After training completes, the trained model will be saved as:
+
+```
+runs/detect/train/weights/best.pt
+```
+
+Download this file and place it in the `Weights/` folder of this project.
+
 ---
+
+💡 Tips for Better Training Results
+
+* **Use a larger model** like `yolov8m.pt` or `yolov8l.pt` for higher accuracy (requires more compute).
+* **Train for more epochs** (e.g., 100–200) if you're not getting good performance.
+* **Ensure class names match** in your `data.yaml`.
+* Use **data augmentation** and balanced datasets.
+
 
 ## 📂 Directory Structure
 
